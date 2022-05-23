@@ -44,7 +44,8 @@ const constructUrl = (path) => {
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
-  renderMovie(movieRes);
+  const castRes = await fetchCast(movie.id);
+  renderMovie(movieRes,castRes);
 };
 
 // This function is to fetch movies. You may need to add it or change some part in it in order to apply some of the features.
@@ -60,22 +61,27 @@ const fetchMovie = async (movieId) => {
   const res = await fetch(url);
   return res.json();
 };
+const fetchCast = async (movieId) => {
+  const url = constructUrl(`movie/${movieId}/credits`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
   movies.map((movie,index) => {
-    console.log(movie);
+    //console.log(movie);
     const movieDiv = document.createElement("div");
     movieDiv.classList = ("col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column movie-poster");
     movieDiv.innerHTML = `
-
     <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster" class="movie-box">
     <div class="movie-info">
       <p>Genre: ${showGenre(movie.genre_ids[0])}</p>
       <p>Rating: ${movie.vote_average}</p>
       <p class="desc">Overview: ${movie.overview.slice(0,200)}...</p>
     </div>
-    
     <h3>${movie.title}</h3>`;
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
@@ -85,7 +91,8 @@ const renderMovies = (movies) => {
 };
 
 // You'll need to play with this function in order to add features and enhance the style.
-const renderMovie = (movie) => {
+const renderMovie = (movie,cast) => {
+  console.log(cast)
   CONTAINER.innerHTML = `
     <div class="row">
         <div class="col-md-4">
@@ -104,8 +111,46 @@ const renderMovie = (movie) => {
         </div>
         </div>
             <h3>Actors:</h3>
-            <ul id="actors" class="list-unstyled"></ul>
+            <ul id="actors" class="list-unstyled">
+              <li>${cast.cast[0].name}</li>
+              <li>${cast.cast[1].name}</li>
+              <li>${cast.cast[2].name}</li>
+              <li>${cast.cast[3].name}</li>
+              <li>${cast.cast[4].name}</li>
+            </ul>
     </div>`;
+  // fetch(constructUrl(`movie/${movie.id}/credits`))
+  // .then((response) => response.json())
+  // .then((json) => {
+  //   for (let i = 0; i < 5; i++) {
+  //     actor1.push(json.cast[i].name);
+  //     console.log(json.cast[i].name);
+  //   }
+  // });
+  // document.getElementById("actors").innerHTML = actor1;
+  // console.log(actor1);
 };
+
+
+
+
+// const fetchMovieActors = async (movieId) => {
+//   const url = constructUrl(`movie/${movieId}/credits`);
+//   const res = await fetch(url);
+//   return res.json();
+// };
+// const movieActors = async () => {
+//   const movieRes = await fetchMovieActors(678287);
+//   return movieRes;
+// };
+// const movieActorName = (movie) => {
+//   let actors = [];
+//   for (let i = 0; i < 5; i++) {
+//     actors.push(movie)
+//   }
+//   return actors;
+// }
+// let actor = movieActors();
+// console.log(actor[["PromiseResult"]]);
 
 document.addEventListener("DOMContentLoaded", autorun);
