@@ -3,7 +3,30 @@
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
-const CONTAINER = document.querySelector(".container");
+const CONTAINER = document.querySelector("#movies");
+
+// Turns genre_id into genre word
+function showGenre(genre_id) {
+  switch(genre_id) {
+    case 28:
+      return "Action";
+      break;
+    case 878:
+      return "Sci-Fi";
+      break;
+    case 35:
+      return "Comedy";
+      break;
+    case 18:
+      return "Drama";
+      break;
+    case 99:
+      return "Documentary";
+      break;
+    default:
+      return "N/A";
+  }
+}
 
 // Don't touch this function please
 const autorun = async () => {
@@ -40,13 +63,20 @@ const fetchMovie = async (movieId) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
-  movies.map((movie) => {
+  movies.map((movie,index) => {
+    console.log(movie);
     const movieDiv = document.createElement("div");
+    movieDiv.classList = ("col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column movie-poster");
     movieDiv.innerHTML = `
-        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
-      movie.title
-    } poster">
-        <h3>${movie.title}</h3>`;
+
+    <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster" class="movie-box">
+    <div class="movie-info">
+      <p>Genre: ${showGenre(movie.genre_ids[0])}</p>
+      <p>Rating: ${movie.vote_average}</p>
+      <p class="desc">Overview: ${movie.overview.slice(0,200)}...</p>
+    </div>
+    
+    <h3>${movie.title}</h3>`;
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
     });
