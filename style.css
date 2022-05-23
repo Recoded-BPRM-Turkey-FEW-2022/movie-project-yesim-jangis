@@ -13,9 +13,33 @@ footer {
     display:flex;
     justify-content: center;
 }
+.movie-poster {
+    position:relative;
+}
 .movie-poster:hover {
     cursor: pointer;
 }
 h3 {
     font-size: 20px;
+}
+
+.movie-info {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+    color: #fff;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .1s visibility .1s;
+
+}
+.movie-poster:hover .movie-info{
+    visibility: visible;
+    opacity: 0.8;
+}
+.desc {
+    font-size: 10px;
 }
