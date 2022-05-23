@@ -3,7 +3,7 @@
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
-const CONTAINER = document.querySelector(".container");
+const CONTAINER = document.querySelector("#movies");
 
 // Don't touch this function please
 const autorun = async () => {
@@ -40,13 +40,12 @@ const fetchMovie = async (movieId) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
-  movies.map((movie) => {
+  movies.map((movie,index) => {
     const movieDiv = document.createElement("div");
+    movieDiv.classList = ("col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column movie-poster");
     movieDiv.innerHTML = `
-        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
-      movie.title
-    } poster">
-        <h3>${movie.title}</h3>`;
+      <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
+      <h3>${movie.title}</h3>`;
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
     });
