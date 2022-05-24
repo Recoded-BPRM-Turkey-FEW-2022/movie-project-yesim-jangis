@@ -5,6 +5,14 @@ const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185"
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780"
 const CONTAINER = document.querySelector("#movies")
 
+const HOME = document.getElementById("home")
+const LOGO = document.getElementById("logo")
+const ACTION = document.getElementById("action")
+const SCIFI = document.getElementById("scifi")
+const COMEDY = document.getElementById("comedy")
+const DRAMA = document.getElementById("drama")
+const DOCUMENTARY = document.getElementById("documentary")
+
 // Turns genre_id into genre word
 function showGenre(genre_id) {
     switch (genre_id) {
@@ -28,16 +36,16 @@ function showGenre(genre_id) {
     }
 }
 function showGender(num) {
-  switch (num) {
-    case 1:
-      return "Female";
-      break;
-    case 2:
-      return "Male";
-      break;
-    default:
-      return "N/A"
-  }
+    switch (num) {
+        case 1:
+            return "Female"
+            break
+        case 2:
+            return "Male"
+            break
+        default:
+            return "N/A"
+    }
 }
 
 // Don't touch this function please
@@ -62,9 +70,15 @@ const movieDetails = async (movie) => {
     renderMovie(movieRes, castRes, similar, trailer)
 }
 const personDetails = async (actor) => {
-  const person = await fetchPerson(actor.id)
-  const personMovies = await fetchPersonMovies(actor.id)
-  renderActor(actor,person,personMovies);
+    const person = await fetchPerson(actor.id)
+    const personMovies = await fetchPersonMovies(actor.id)
+    renderActor(actor, person, personMovies)
+}
+
+const genreMovieDetails = async (genreId) => {
+    const genre = await fetchGenreMovies(genreId)
+    console.log(genre)
+    renderMovies(genre.results)
 }
 
 // This function is to fetch movies. You may need to add it or change some part in it in order to apply some of the features.
@@ -96,15 +110,20 @@ const fetchTrailer = async (movieId) => {
     const res = await fetch(url)
     return res.json()
 }
-const fetchPerson= async (personId) => {
-  const url = constructUrl(`person/${personId}`)
-  const res = await fetch(url)
-  return res.json()
+const fetchPerson = async (personId) => {
+    const url = constructUrl(`person/${personId}`)
+    const res = await fetch(url)
+    return res.json()
 }
 const fetchPersonMovies = async (personId) => {
-  const url = constructUrl(`person/${personId}/movie_credits`)
-  const res = await fetch(url)
-  return res.json()
+    const url = constructUrl(`person/${personId}/movie_credits`)
+    const res = await fetch(url)
+    return res.json()
+}
+const fetchGenreMovies = async (genreId) => {
+    const url = constructUrl(`discover/movie`) + "&with_genres=" + genreId
+    const res = await fetch(url)
+    return res.json()
 }
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
@@ -208,20 +227,19 @@ const renderMovie = (movie, cast, simmovies, trailers) => {
         <p>Total votes: ${movie.vote_count}</p>
       </div>
     </div>`
-    let actorLinks = document.getElementsByTagName("button");
+    let actorLinks = document.getElementsByTagName("button")
     for (let i = 0; i < actorLinks.length; i++) {
-      actorLinks[i].addEventListener("click", () => {
-        personDetails(cast.cast[actorLinks[i].id]);
-
-      })
+        actorLinks[i].addEventListener("click", () => {
+            personDetails(cast.cast[actorLinks[i].id])
+        })
     }
 }
 
-const renderActor = (actor,person,personMovies) => {
-  console.log(actor);
-  console.log(person);
-  console.log(personMovies);
-  CONTAINER.innerHTML = `
+const renderActor = (actor, person, personMovies) => {
+    console.log(actor)
+    console.log(person)
+    console.log(personMovies)
+    CONTAINER.innerHTML = `
   <div class="row">
     <div class="col-sm-4">
       <img src="${PROFILE_BASE_URL + actor.profile_path}">
@@ -248,5 +266,32 @@ const renderActor = (actor,person,personMovies) => {
   </div>
   `
 }
-
+HOME.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    autorun()
+})
+LOGO.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    autorun()
+})
+ACTION.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    genreMovieDetails(28)
+})
+SCIFI.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    genreMovieDetails(878)
+})
+COMEDY.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    genreMovieDetails(35)
+})
+DRAMA.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    genreMovieDetails(18)
+})
+DOCUMENTARY.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    genreMovieDetails(99)
+})
 document.addEventListener("DOMContentLoaded", autorun)
