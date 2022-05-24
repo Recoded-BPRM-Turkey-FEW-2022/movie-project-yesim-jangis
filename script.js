@@ -27,6 +27,18 @@ function showGenre(genre_id) {
             return "N/A"
     }
 }
+function showGender(num) {
+  switch (num) {
+    case 1:
+      return "Female";
+      break;
+    case 2:
+      return "Male";
+      break;
+    default:
+      return "N/A"
+  }
+}
 
 // Don't touch this function please
 const autorun = async () => {
@@ -48,6 +60,11 @@ const movieDetails = async (movie) => {
     const similar = await fetchSim(movie.id)
     const trailer = await fetchTrailer(movie.id)
     renderMovie(movieRes, castRes, similar, trailer)
+}
+const personDetails = async (actor) => {
+  const person = await fetchPerson(actor.id)
+  const personMovies = await fetchPersonMovies(actor.id)
+  renderActor(actor,person,personMovies);
 }
 
 // This function is to fetch movies. You may need to add it or change some part in it in order to apply some of the features.
@@ -79,6 +96,16 @@ const fetchTrailer = async (movieId) => {
     const res = await fetch(url)
     return res.json()
 }
+const fetchPerson= async (personId) => {
+  const url = constructUrl(`person/${personId}`)
+  const res = await fetch(url)
+  return res.json()
+}
+const fetchPersonMovies = async (personId) => {
+  const url = constructUrl(`person/${personId}/movie_credits`)
+  const res = await fetch(url)
+  return res.json()
+}
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
     movies.map((movie, index) => {
@@ -105,10 +132,10 @@ const renderMovies = (movies) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = (movie, cast, simmovies, trailers) => {
-    console.log(cast)
-    console.log(movie)
-    console.log(simmovies)
-    console.log(trailers)
+    // console.log(cast)
+    // console.log(movie)
+    // console.log(simmovies)
+    // console.log(trailers)
     console.log(Object.values(cast.crew))
     let crew = Object.values(cast.crew)
     let director = ""
@@ -134,20 +161,26 @@ const renderMovie = (movie, cast, simmovies, trailers) => {
             <h3>Overview:</h3>
             <p id="movie-overview">${movie.overview}</p>
         </div>
-        </div>
+    </div>
+    <div class="row m-5">
+        <div class="col-md-4">
             <h3>Actors:</h3>
             <ul id="actors" class="list-unstyled">
-              <li>${cast.cast[0].name}</li>
-              <li>${cast.cast[1].name}</li>
-              <li>${cast.cast[2].name}</li>
-              <li>${cast.cast[3].name}</li>
-              <li>${cast.cast[4].name}</li>
+              <li><button id="0">${cast.cast[0].name}</button></li>
+              <li><button id="1">${cast.cast[1].name}</button></li>
+              <li><button id="2">${cast.cast[2].name}</button></li>
+              <li><button id="3">${cast.cast[3].name}</button></li>
+              <li><button id="4">${cast.cast[4].name}</button></li>
             </ul>
+        </div>
+        <div class="col-md-4">
             <h3>Language: ${movie.original_language}</h3>
             <h3>Production Company: ${movie.production_companies[0].name}</h3>
             <img src="${BACKDROP_BASE_URL}${
         movie.production_companies[0].logo_path
     }">
+        </div>
+        <div class="col-md-4">
         <h3>Similar Movies:</h3>
         <ul id="simmovies" class="list-unstyled">
         <li>${simmovies.results[0].title}</li>
@@ -157,18 +190,63 @@ const renderMovie = (movie, cast, simmovies, trailers) => {
         <li>${simmovies.results[4].title}</li>
    
         </ul>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
         <h3>Trailer:</h3>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/${
             trailers.results[0].key
         }"
          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
+      </div>
+      <div class="col-md-4">
         <h3>Director: ${director}</h3>
         <h3>Movie Rating:</h3>
         <p>Rating: ${movie.vote_average}</p>
         <p>Total votes: ${movie.vote_count}</p>
-
+      </div>
     </div>`
+    let actorLinks = document.getElementsByTagName("button");
+    for (let i = 0; i < actorLinks.length; i++) {
+      actorLinks[i].addEventListener("click", () => {
+        personDetails(cast.cast[actorLinks[i].id]);
+
+      })
+    }
+}
+
+const renderActor = (actor,person,personMovies) => {
+  console.log(actor);
+  console.log(person);
+  console.log(personMovies);
+  CONTAINER.innerHTML = `
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="${PROFILE_BASE_URL + actor.profile_path}">
+      <h3>${actor.name}</h3>
+      <h3>Gender: ${showGender(actor.gender)}</h3>
+      <h3>Popularity: ${actor.popularity}</h3>
+      <h3>Birthday: ${person.birthday}</h3>
+      <h3>Deathday: ${person.deathday}</h3>
+    </div>
+    <div class="col-sm-8">
+      <h3>Biography</h3>
+      <p>${person.biography}</p>
+    </div>
+  </div>
+  <div class="row m-5">
+    <h3>Actor's Movies: </h3>
+    <ul>
+      <li>${personMovies.cast[0].title}</li>
+      <li>${personMovies.cast[1].title}</li>
+      <li>${personMovies.cast[2].title}</li>
+      <li>${personMovies.cast[3].title}</li>
+      <li>${personMovies.cast[4].title}</li>
+    </ul>
+  </div>
+  `
 }
 
 document.addEventListener("DOMContentLoaded", autorun)
