@@ -12,6 +12,8 @@ const SCIFI = document.getElementById("scifi")
 const COMEDY = document.getElementById("comedy")
 const DRAMA = document.getElementById("drama")
 const DOCUMENTARY = document.getElementById("documentary")
+const ACTORS = document.getElementById("actorsList")
+
 
 // Turns genre_id into genre word
 function showGenre(genre_id) {
@@ -52,6 +54,10 @@ function showGender(num) {
 const autorun = async () => {
     const movies = await fetchMovies()
     renderMovies(movies.results)
+}
+const listActors = async () => {
+    const actors = await fetchActors()
+    renderActors(actors.results)
 }
 
 // Don't touch this function please
@@ -125,6 +131,31 @@ const fetchGenreMovies = async (genreId) => {
     const res = await fetch(url)
     return res.json()
 }
+const fetchActors = async () => {
+    const url = constructUrl(`person/popular`)
+    const res = await fetch(url)
+    return res.json()
+}
+
+// this function lists all popular actors
+const renderActors= (actors) => {
+    console.log(actors);
+    actors.map((actor) => {
+        const actorDiv = document.createElement("div")
+        actorDiv.classList =
+            "col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column actor-poster"
+        actorDiv.innerHTML = `
+    <img src="${PROFILE_BASE_URL + actor.profile_path}" alt="${
+            actor.name
+        } poster">
+    <h3>${actor.name}</h3>`
+        actorDiv.addEventListener("click", () => {
+            personDetails(actor)
+        })
+        CONTAINER.appendChild(actorDiv)
+    })
+}
+
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
     movies.map((movie, index) => {
@@ -236,9 +267,6 @@ const renderMovie = (movie, cast, simmovies, trailers) => {
 }
 
 const renderActor = (actor, person, personMovies) => {
-    console.log(actor)
-    console.log(person)
-    console.log(personMovies)
     CONTAINER.innerHTML = `
   <div class="row">
     <div class="col-sm-4">
@@ -293,5 +321,9 @@ DRAMA.addEventListener("click", () => {
 DOCUMENTARY.addEventListener("click", () => {
     CONTAINER.innerHTML = ""
     genreMovieDetails(99)
+})
+ACTORS.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listActors();
 })
 document.addEventListener("DOMContentLoaded", autorun)

@@ -19,6 +19,9 @@ footer {
 .movie-poster:hover {
     cursor: pointer;
 }
+.actor-poster:hover {
+    cursor: pointer;
+}
 h3 {
     font-size: 20px;
 }
