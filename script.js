@@ -13,7 +13,12 @@ const COMEDY = document.getElementById("comedy")
 const DRAMA = document.getElementById("drama")
 const DOCUMENTARY = document.getElementById("documentary")
 const ACTORS = document.getElementById("actorsList")
-
+const POPULAR = document.getElementById("popular")
+const RELEASE = document.getElementById("release")
+const TOPRATED = document.getElementById("topRated")
+const NOWPLAYING = document.getElementById("nowPlaying")
+const UPCOMING = document.getElementById("upComing")
+const ABOUT = document.getElementById("about")
 
 // Turns genre_id into genre word
 function showGenre(genre_id) {
@@ -58,6 +63,28 @@ const autorun = async () => {
 const listActors = async () => {
     const actors = await fetchActors()
     renderActors(actors.results)
+}
+
+const listPopular = async () => {
+    const movies = await fetchPopular()
+    renderMovies(movies.results)
+}
+const listRelease = async () => {
+    const movies = await fetchRelease()
+    renderMovies(movies.results)
+    //console.log(movies)
+}
+const listTopRated = async () => {
+    const movies = await fetchTopRated()
+    renderMovies(movies.results)
+}
+const listUpComing = async () => {
+    const movies = await fetchUpComing()
+    renderMovies(movies.results)
+}
+const listNowPlaying = async () => {
+    const movies = await fetchNowPlaying()
+    renderMovies(movies.results)
 }
 
 // Don't touch this function please
@@ -136,10 +163,35 @@ const fetchActors = async () => {
     const res = await fetch(url)
     return res.json()
 }
+const fetchPopular = async () => {
+    const url = constructUrl(`movie/popular`)
+    const res = await fetch(url)
+    return res.json()
+}
+const fetchRelease = async () => {
+    const url = constructUrl(`trending/movie/week`)
+    const res = await fetch(url)
+    return res.json()
+}
+const fetchTopRated = async () => {
+    const url = constructUrl(`movie/top_rated`)
+    const res = await fetch(url)
+    return res.json()
+}
+const fetchUpComing = async () => {
+    const url = constructUrl(`movie/upcoming`)
+    const res = await fetch(url)
+    return res.json()
+}
+const fetchNowPlaying = async () => {
+    const url = constructUrl(`movie/now_playing`)
+    const res = await fetch(url)
+    return res.json()
+}
 
 // this function lists all popular actors
-const renderActors= (actors) => {
-    console.log(actors);
+const renderActors = (actors) => {
+    console.log(actors)
     actors.map((actor) => {
         const actorDiv = document.createElement("div")
         actorDiv.classList =
@@ -158,7 +210,7 @@ const renderActors= (actors) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
-    movies.map((movie, index) => {
+    movies.map((movie) => {
         //console.log(movie);
         const movieDiv = document.createElement("div")
         movieDiv.classList =
@@ -324,6 +376,31 @@ DOCUMENTARY.addEventListener("click", () => {
 })
 ACTORS.addEventListener("click", () => {
     CONTAINER.innerHTML = ""
-    listActors();
+    listActors()
+})
+POPULAR.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listPopular()
+})
+RELEASE.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listRelease()
+})
+UPCOMING.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listUpComing()
+})
+TOPRATED.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listTopRated()
+})
+NOWPLAYING.addEventListener("click", () => {
+    CONTAINER.innerHTML = ""
+    listNowPlaying()
+})
+ABOUT.addEventListener("click", () => {
+    CONTAINER.innerHTML = `<p>Welcome to MOVIE HELL.
+    We are a team of developers who fell into a deep hell of movies.
+    </p>`
 })
 document.addEventListener("DOMContentLoaded", autorun)
