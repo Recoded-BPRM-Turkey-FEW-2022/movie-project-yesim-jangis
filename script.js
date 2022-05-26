@@ -191,13 +191,14 @@ const fetchNowPlaying = async () => {
 
 // this function lists all popular actors
 const renderActors = (actors) => {
+    
     console.log(actors)
     actors.map((actor) => {
         const actorDiv = document.createElement("div")
         actorDiv.classList =
             "col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column actor-poster"
         actorDiv.innerHTML = `
-    <img src="${PROFILE_BASE_URL + actor.profile_path}" alt="${
+    <img id="actor-size" class="rounded-3"src="${PROFILE_BASE_URL + actor.profile_path}" alt="${
             actor.name
         } poster">
     <h3>${actor.name}</h3>`
@@ -210,15 +211,18 @@ const renderActors = (actors) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
+    CONTAINER.classList="container-content container-fluid d-flex flex-row flex-wrap justify-content-center text-center mt-4"
+
+    CONTAINER.classList.add("flame")
     movies.map((movie) => {
         //console.log(movie);
         const movieDiv = document.createElement("div")
         movieDiv.classList =
             "col-lg-3 col-md-4 col-sm-12 m-3 p-0 rounded d-flex flex-column movie-poster"
         movieDiv.innerHTML = `
-    <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
-            movie.title
-        } poster" class="movie-box">
+    <img class="rounded-3" src="${
+        BACKDROP_BASE_URL + movie.backdrop_path
+    }" alt="${movie.title} poster" class="movie-box">
     <div class="movie-info">
       <p>Genre: ${showGenre(movie.genre_ids[0])}</p>
       <p>Rating: ${movie.vote_average}</p>
@@ -233,11 +237,16 @@ const renderMovies = (movies) => {
 }
 
 // You'll need to play with this function in order to add features and enhance the style.
-const renderMovie = (movie, cast, simmovies, trailers) => {
+const renderMovie = (movie, cast, simmovies, trailers) => { 
+     CONTAINER.classList=""
+  
+
+    
     // console.log(cast)
     // console.log(movie)
     // console.log(simmovies)
     // console.log(trailers)
+    //CONTAINER.classList.remove("flame")
     console.log(Object.values(cast.crew))
     let crew = Object.values(cast.crew)
     let director = ""
@@ -248,81 +257,122 @@ const renderMovie = (movie, cast, simmovies, trailers) => {
     }
     console.log(director)
     CONTAINER.innerHTML = `
+    <div class="container d-flex justify-content-between  mt-2" >
+      
+        <h1 class="m-4" id="movie-title">${movie.title}</h1>
+       
+    
+        <div class="d-flex">
+        <p class="m-4">Rating:${movie.vote_average}</p>
+
+        <p class="m-4">Total votes: ${movie.vote_count}</p>
+        </div>
+    
+    </div>
     <div class="row">
+        
         <div class="col-md-4">
-             <img id="movie-backdrop" src=${
+        
+             <img class="rounded-3" id="movie-backdrop" src=${
                  BACKDROP_BASE_URL + movie.backdrop_path
              }>
         </div>
         <div class="col-md-8">
-            <h2 id="movie-title">${movie.title}</h2>
+            
             <p id="movie-release-date"><b>Release Date:</b> ${
                 movie.release_date
             }</p>
             <p id="movie-runtime"><b>Runtime:</b> ${movie.runtime} Minutes</p>
             <h3>Overview:</h3>
             <p id="movie-overview">${movie.overview}</p>
+            
+            <div class="d-flex align-items-center justify-content-center">
+            <div class="m-3">
+            <p><b>Language: </b>${movie.original_language}</p>
+            <p><b>Production Company: </b>${movie.production_companies[0].name}</p>
+            </div>
+            <img class="logo-size img-fluid m-3" src="${BACKDROP_BASE_URL}${
+                movie.production_companies[0].logo_path
+            }">
+            <div class="m-3 ">
+            <h3>Director: ${director}</h3>
+            </div>
+            </div>
+            
         </div>
     </div>
-    <div class="row m-5">
-        <div class="col-md-4">
-            <h3>Actors:</h3>
-            <ul id="actors" class="list-unstyled">
-              <li><button id="0">${cast.cast[0].name}</button></li>
-              <li><button id="1">${cast.cast[1].name}</button></li>
-              <li><button id="2">${cast.cast[2].name}</button></li>
-              <li><button id="3">${cast.cast[3].name}</button></li>
-              <li><button id="4">${cast.cast[4].name}</button></li>
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <h3>Language: ${movie.original_language}</h3>
-            <h3>Production Company: ${movie.production_companies[0].name}</h3>
-            <img src="${BACKDROP_BASE_URL}${
-        movie.production_companies[0].logo_path
-    }">
-        </div>
-        <div class="col-md-4">
-        <h3>Similar Movies:</h3>
-        <ul id="simmovies" class="list-unstyled">
-        <li>${simmovies.results[0].title}</li>
-        <li>${simmovies.results[1].title}</li>
-        <li>${simmovies.results[2].title}</li>
-        <li>${simmovies.results[3].title}</li>
-        <li>${simmovies.results[4].title}</li>
-   
-        </ul>
-        </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8">
-        <h3>Trailer:</h3>
+    <div class=" m-5 d-flex justify-content-around">
+    <div >
+        
         <iframe width="560" height="315" src="https://www.youtube.com/embed/${
             trailers.results[0].key
         }"
          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
       </div>
-      <div class="col-md-4">
-        <h3>Director: ${director}</h3>
-        <h3>Movie Rating:</h3>
-        <p>Rating: ${movie.vote_average}</p>
-        <p>Total votes: ${movie.vote_count}</p>
-      </div>
-    </div>`
+        <div >
+            
+            <ul id="actors" class="list-unstyled d-flex flex-column align-items-center ">
+              <h3>Actors</h3>
+              <li><button type="button" class="btn btn-outline-warning m-2"id="0">${cast.cast[0].name}</button></li>
+              <li><button type="button" class="btn btn-outline-warning m-2" id="1">${cast.cast[1].name}</button></li>
+              <li><button type="button" class="btn btn-outline-warning m-2" id="2">${cast.cast[2].name}</button></li>
+              <li><button type="button" class="btn btn-outline-warning m-2" id="3">${cast.cast[3].name}</button></li>
+              <li><button type="button" class="btn btn-outline-warning m-2" id="4">${cast.cast[4].name}</button></li>
+            </ul>
+        </div>
+     </div>
+        <div >
+        <h3 style="text-align:center;">Similar Movies</h3>
+        <ul id="simmovies" class="list-unstyled d-flex justify-content-around">
+            <li class="simmovie m-1" id="6">
+                <img  class="img-size" src="${BACKDROP_BASE_URL+simmovies.results[0].poster_path}">
+                ${simmovies.results[0].title}
+            </li>
+            <li class="simmovie m-1" id="7">
+                <img class="img-size" src="${BACKDROP_BASE_URL+simmovies.results[1].poster_path}">
+                ${simmovies.results[1].title}
+            </li>
+            <li class="simmovie m-1" id="8">
+                <img class="img-size" src="${BACKDROP_BASE_URL+simmovies.results[2].poster_path}">
+                ${simmovies.results[2].title}
+            </li>
+            <li class="simmovie m-1" id="9">
+                <img class="img-size" src="${BACKDROP_BASE_URL+simmovies.results[3].poster_path}">
+                ${simmovies.results[3].title}
+            </li>
+            <li class="simmovie m-1" id="10">
+                <img class="img-size" src="${BACKDROP_BASE_URL+simmovies.results[4].poster_path}">
+                ${simmovies.results[4].title}
+            </li>
+        </ul>
+        </div>
+    </div>
+    `
     let actorLinks = document.getElementsByTagName("button")
     for (let i = 0; i < actorLinks.length; i++) {
         actorLinks[i].addEventListener("click", () => {
             personDetails(cast.cast[actorLinks[i].id])
         })
     }
+    let simLinks = document.getElementsByClassName("simmovie")
+    console.log(simLinks)
+    for (let i = 0; i < simLinks.length; i++) {
+        simLinks[i].addEventListener("click", () => {
+            console.log("click")
+            movieDetails(simmovies.results[simLinks[i].id-5])
+        })
+    }
+
 }
 
 const renderActor = (actor, person, personMovies) => {
+    CONTAINER.classList.remove("flame")
+
     CONTAINER.innerHTML = `
   <div class="row">
     <div class="col-sm-4">
-      <img src="${PROFILE_BASE_URL + actor.profile_path}">
+      <img class="rounded-3" src="${PROFILE_BASE_URL + actor.profile_path}">
       <h3>${actor.name}</h3>
       <h3>Gender: ${showGender(actor.gender)}</h3>
       <h3>Popularity: ${actor.popularity}</h3>
