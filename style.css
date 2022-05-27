@@ -7,17 +7,20 @@
 }
 
 #actors {
-    margin: 24px 16px 0 0;
+    
 }
 footer {
-    display:flex;
+    display: flex;
     justify-content: center;
 }
 .movie-poster {
-    position:relative;
+    position: relative;
 }
 .movie-poster:hover {
     cursor: pointer;
+}
+.simmovie:hover {
+    cursor:pointer;
 }
 .actor-poster:hover {
     cursor: pointer;
@@ -36,10 +39,9 @@ h3 {
     color: #fff;
     visibility: hidden;
     opacity: 0;
-    transition: opacity .1s visibility .1s;
-
+    transition: opacity 0.1s visibility 0.1s;
 }
-.movie-poster:hover .movie-info{
+.movie-poster:hover .movie-info {
     visibility: visible;
     opacity: 0.8;
 }
@@ -48,4 +50,19 @@ h3 {
 }
 img {
     width: 100%;
+}
+
+.flame{
+    background-image: url("flame.gif");
+   background-position: center;
+   color:white;
+}
+.logo-size{
+    max-width: 10%;
+    height: auto;
+
+}
+.simmovie{
+    width: 180px;
+    height: 320px;
 }
