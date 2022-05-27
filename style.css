@@ -22,6 +22,9 @@ footer {
 .simmovie:hover {
     cursor:pointer;
 }
+.actor-poster {
+    width: 180px;
+}
 .actor-poster:hover {
     cursor: pointer;
 }
@@ -32,7 +35,7 @@ h3 {
 .movie-info {
     position: absolute;
     top: 0;
-    bottom: 0;
+    bottom: 34px;
     left: 0;
     right: 0;
     background: black;
@@ -41,6 +44,7 @@ h3 {
     opacity: 0;
     transition: opacity 0.1s visibility 0.1s;
 }
+
 .movie-poster:hover .movie-info {
     visibility: visible;
     opacity: 0.8;
@@ -66,3 +70,21 @@ img {
     width: 180px;
     height: 320px;
 }
+nav {
+    font-family: 'Creepster', cursive;
+    font-size: 24px;
+}
+.navbar-brand {
+    font-size: 36px;
+}
+.movie-title-hell {
+    font-family: 'Creepster', cursive;
+    font-size: 24px;
+}
+.about-hell {
+    font-family: 'Creepster', cursive;
+    font-size: 72px;
+    text-align: center;
+    background-size: cover;
+}
+
