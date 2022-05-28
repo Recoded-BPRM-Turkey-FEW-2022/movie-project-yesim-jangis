@@ -21,6 +21,8 @@ const TOPRATED = document.getElementById("topRated")
 const NOWPLAYING = document.getElementById("nowPlaying")
 const UPCOMING = document.getElementById("upComing")
 const ABOUT = document.getElementById("about")
+const SEARCH = document.getElementById("searchBut")
+const searchText = document.getElementById("searchText")
 
 // Turns genre_id into genre word
 function showGenre(genre_id) {
@@ -88,6 +90,11 @@ const listTopRated = async () => {
 const listUpComing = async () => {
     const movies = await fetchUpComing()
     renderMovies(movies.results)
+}
+const listSearch = async (query) => {
+    const movies = await fetchSearch(query);
+    //console.log(movies)
+    renderMovies(movies.results);
 }
 // lists movies now playing in theaters
 const listNowPlaying = async () => {
@@ -205,6 +212,12 @@ const fetchUpComing = async () => {
 // This function fetches movies newly in theaters
 const fetchNowPlaying = async () => {
     const url = constructUrl(`movie/now_playing`)
+    const res = await fetch(url)
+    return res.json()
+}
+//https://api.themoviedb.org/3/search/movie?api_key=###&search_type=ngram&query=iron+man+3
+const fetchSearch = async (query) => {
+    const url = constructUrl("search/movie") + "&search_type=ngram&query=" + query;
     const res = await fetch(url)
     return res.json()
 }
@@ -482,5 +495,9 @@ ABOUT.addEventListener("click", () => {
     CONTAINER.innerHTML = `<p>Welcome to MOVIE HELL.<br>
     We are a team of developers who fell into a deep hell of movies.
     </p>`
+})
+SEARCH.addEventListener("click", () => {
+    CONTAINER.innerHTML = "";
+    listSearch(searchText.value)
 })
 document.addEventListener("DOMContentLoaded", autorun)
